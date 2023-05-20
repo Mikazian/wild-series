@@ -1,6 +1,31 @@
+$primary: #ed6c6d;
+$secondary: #272727;
+$dark: #141414;
+
+@import "~bootstrap/scss/bootstrap";
+
 body {
-    background-color: blue;
-    h1 {
-        color: white;
-    }
+    background-color: $dark;
+}
+
+nav {
+    background-color: $secondary;
+}
+
+.image-size {
+    width: 3rem;
+}
+
+.text-primary {
+    $bs-text-opacity: 1;
+    color: rgba($primary, $bs-text-opacity) !important;
+}
+
+.border-primary {
+    $bs-border-opacity: 1;
+    border-color: rgba($primary, $bs-border-opacity) !important;
+}
+
+.custom-width {
+    width: 10rem;
 }
