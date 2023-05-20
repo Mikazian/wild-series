@@ -1,6 +1,6 @@
 $primary: #ed6c6d;
-$secondary: #272727;
-$dark: #141414;
+$secondary: #202020;
+$dark: #0a0a0a;
 
 @import "~bootstrap/scss/bootstrap";
 
@@ -28,4 +28,10 @@ nav {
 
 .custom-width {
     width: 10rem;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: $primary;
+    color: $secondary !important;
 }
