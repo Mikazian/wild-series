@@ -30,6 +30,18 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             'title' => 'La Tour Montparnasse Infernal',
             'synopsys' => 'Eric et Ramzy affronte des cambioleurs',
             'category' => 'category_Comedie',
+        ], [
+            'title' => 'Résident Evil',
+            'synopsys' => 'Invasion de zombies',
+            'category' => 'category_Horreur',
+        ], [
+            'title' => 'The ring',
+            'synopsys' => 'Une cassette VHS étrange qui fait apparaître une entitée tueuse',
+            'category' => 'category_Horreur',
+        ], [
+            'title' => 'L\éxorciste',
+            'synopsys' => 'Une fille qui se fait possèder par un démon',
+            'category' => 'category_Horreur',
         ]
     ];
 

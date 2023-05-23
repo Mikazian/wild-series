@@ -1,0 +1,18 @@
+{% block body %}
+	<h1>{{ category.name }}
+	</h1>
+	{% for program in programs %}
+		<div class="media">
+			<div class="media-body">
+				<h1 class="mt-0">{{ program.title }}
+					{{ program.id }}</h1>
+				<p>{{ program.synopsys }}</p>
+			</div>
+		</div>
+		<a href="{{ path("program_show", { id: program.id }) }}">Voir la fiche</a>
+	{% endfor %}
+
+	<a href="{{ path('program_index') }}">
+		Retour à la liste des programmes
+	</a>
+{% endblock %}
