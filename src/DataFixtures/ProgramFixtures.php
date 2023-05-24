@@ -39,9 +39,13 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             'synopsys' => 'Une cassette VHS étrange qui fait apparaître une entitée tueuse',
             'category' => 'category_Horreur',
         ], [
-            'title' => 'L\éxorciste',
+            'title' => 'L\'éxorciste',
             'synopsys' => 'Une fille qui se fait possèder par un démon',
             'category' => 'category_Horreur',
+        ], [
+            'title' => 'The Breaking Bad',
+            'synopsys' => 'Un professeur de science qui a cancer et qui devient un dealer',
+            'category' => 'category_Policier',
         ]
     ];
 
@@ -52,7 +56,9 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setTitle($programData['title']);
             $program->setSynopsys($programData['synopsys']);
             $program->setCategory($this->getReference($programData['category']));
+
             $manager->persist($program);
+            $this->addReference('program_' . $programData['title'], $program);
         }
         $manager->flush();
     }

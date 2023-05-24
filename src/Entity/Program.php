@@ -25,12 +25,18 @@ class Program
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $poster = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'programs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
     #[ORM\OneToMany(mappedBy: 'program', targetEntity: Season::class)]
     private Collection $seasons;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $country = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $year = null;
 
     public function __construct()
     {
@@ -116,6 +122,30 @@ class Program
                 $season->setProgram(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(?int $year): self
+    {
+        $this->year = $year;
 
         return $this;
     }

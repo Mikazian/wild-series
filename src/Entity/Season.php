@@ -17,13 +17,12 @@ class Season
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'seasons')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?program $program = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $number = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $year = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -59,7 +58,7 @@ class Season
         return $this->number;
     }
 
-    public function setNumber(int $number): self
+    public function setNumber(?int $number): self
     {
         $this->number = $number;
 
@@ -71,7 +70,7 @@ class Season
         return $this->year;
     }
 
-    public function setYear(int $year): self
+    public function setYear(?int $year): self
     {
         $this->year = $year;
 
