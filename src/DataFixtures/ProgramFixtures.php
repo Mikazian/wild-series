@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\Program;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -49,16 +50,37 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         ]
     ];
 
+    // public function load(ObjectManager $manager)
+    // {
+    //     $faker = Factory::create();
+
+    //     foreach (self::PROGRAMS as $index => $programData) {
+    //         $program = new Program();
+    //         $program->setTitle($programData['title']);
+    //         $program->setSynopsys($programData['synopsys']);
+    //         $program->setCategory($this->getReference($programData['category']));
+
+    //         $manager->persist($program);
+    //         $this->addReference('program_' . $index, $program);
+    //     }
+    //     $manager->flush();
+    // }
+
     public function load(ObjectManager $manager)
     {
-        foreach (self::PROGRAMS as $programData) {
+        $faker = Factory::create();
+
+        for ($i = 0; $i <= 15; $i++) {
             $program = new Program();
-            $program->setTitle($programData['title']);
-            $program->setSynopsys($programData['synopsys']);
-            $program->setCategory($this->getReference($programData['category']));
+            $program->setTitle($faker->sentence(3));
+            $program->setSynopsys($faker->paragraph(3));
+            // $program->setPoster($faker->imageUrl);
+            $program->setCountry($faker->country('fr_FR'));
+            $program->setYear($faker->year('+10 years'));
+            $program->setCategory($this->getReference('category_' . $faker->numberBetween(1, 10)));
 
             $manager->persist($program);
-            $this->addReference('program_' . $programData['title'], $program);
+            $this->setReference('program_' . $i, $program);
         }
         $manager->flush();
     }
