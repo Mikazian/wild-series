@@ -2,13 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\ProgramRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProgramRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
+
+/**
+ * @ORM\Entity
+ * @UniqueEntity(fields={"title"}, message="Ce titre est déjà utilisé.")
+ */
+
 class Program
 {
     #[ORM\Id]
@@ -16,10 +25,16 @@ class Program
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez remplir le champs Titre')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Le titre saisie {{ value }} doit contenir au moin de {{ limit }} caractères.'
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(message: 'Veuillez remplir le champs Synopsis')]
     private ?string $synopsys = null;
 
     #[ORM\Column(length: 255, nullable: true)]
