@@ -80,7 +80,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setCategory($this->getReference('category_' . $faker->numberBetween(1, 10)));
 
             $manager->persist($program);
-            $this->setReference('program_' . $i, $program);
+            $this->addReference('program_' . $i, $program);
         }
         $manager->flush();
     }
