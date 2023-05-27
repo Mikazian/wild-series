@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wild Series | Acteur
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-primary">Description de l'acteur</h1>
+	<div class="text-light">
+		<h2>Liste des films joués par
+			{{ actor.getName()}}</h2>
+		<ul>
+			{% for program in actor.programs %}
+				<li>{{ program.title }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<a href="{{ path('actor_index') }}">Retour à la liste des acteurs</a>
+{% endblock %}

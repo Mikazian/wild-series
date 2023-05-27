@@ -12,22 +12,6 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
     const PROGRAMS = 50;
 
-    // public function load(ObjectManager $manager)
-    // {
-    //     $faker = Factory::create();
-
-    //     foreach (self::PROGRAMS as $index => $programData) {
-    //         $program = new Program();
-    //         $program->setTitle($programData['title']);
-    //         $program->setSynopsys($programData['synopsys']);
-    //         $program->setCategory($this->getReference($programData['category']));
-
-    //         $manager->persist($program);
-    //         $this->addReference('program_' . $index, $program);
-    //     }
-    //     $manager->flush();
-    // }
-
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
@@ -36,7 +20,6 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program = new Program();
             $program->setTitle($faker->sentence(3));
             $program->setSynopsys($faker->paragraph(3));
-            // $program->setPoster($faker->imageUrl);
             $program->setCountry($faker->country('fr_FR'));
             $program->setYear($faker->year('+10 years'));
             $program->setCategory($this->getReference('category_' . $faker->numberBetween(0, 4)));
