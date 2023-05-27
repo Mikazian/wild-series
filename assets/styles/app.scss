@@ -35,3 +35,85 @@ nav {
     background-color: $primary;
     color: $secondary !important;
 }
+
+.color-bar {
+    width: 100%;
+    height: 0.3rem;
+    background-color: $primary;
+}
+
+.carousel-inner {
+    padding: 1em;
+}
+
+.card {
+    margin: 0 0.5em;
+    box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+    // border: 1px solid $primary;
+    background-color: $dark;
+}
+
+.card-body {
+    padding: 1rem 0;
+}
+
+.h-custom {
+    height: 50px;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+    height: 500px;
+    overflow: hidden;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+}
+
+.image-home {
+    width: 100%;
+    object-fit: cover;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    background-color: $dark;
+    width: 6vh;
+    height: 6vh;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media (min-width: 768px) {
+    .carousel-item {
+        margin-right: 0;
+        flex: 0 0 calc(100% / 5);
+        display: block;
+    }
+    .carousel-inner {
+        display: flex;
+    }
+}
+.card .img-wrapper {
+    max-width: 100%;
+    height: 13em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.card img {
+    max-height: 100%;
+}
+@media (max-width: 767px) {
+    .card .img-wrapper {
+        height: 17em;
+    }
+}

@@ -1,8 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Wild Series | Home page
+{% block title %}
+	{{ parent() }}
+	| Accueil
+{% endblock %}
+
+{% block stylesheets %}
+	{{ encore_entry_link_tags('app') }}
 {% endblock %}
 
 {% block body %}
-	<h1 class="container text-primary">Home Page</h1>
+	<div class="image-container">
+		<div class="overlay"></div>
+		<img src="{{ asset('build/images/header_home.jpg') }}" alt="Image accueil" class="img-fluid image-home">
+	</div>
+
+
+	{% for category in categories %}
+		<div class="container mt-5">
+			<h2 class="text-primary">{{ category.name }}</h2>
+			<div class="color-bar mt-3"></div>
+			<div id="carouselExampleControls" class="carousel" data-bs-ride="carousel">
+				<div class="carousel-inner">
+					{% for program in category.programs %}
+						<div class="carousel-item active">
+							<div class="card">
+								<div class="img-wrapper"><img src="https://placeimg.com/234/208/tech" class="d-block w-100" alt="...">
+								</div>
+								<div class="card-body">
+									<h5 class="card-title text-light fs-6 h-custom">{{ program.title }}</h5>
+									{# <p class="card-text">{{ program.synopsys }}</p> #}
+									<p class="card-text h-custom text-light">
+										<span class="text-primary">Série</span>
+										{{ program.country ~ ' ' ~ program.year }}</p>
+									<a href="{{ path("program_show", { id: program.id }) }}" class="btn text-primary border border-primary">Voir plus</a>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
+			</div>
+		</div>
+	{% endfor %}
 {% endblock %}
