@@ -6,28 +6,25 @@
 {% block body %}
 	<div class="media">
 		<div class="media-body">
-			<h1 class="mt-0">{{ program.title }}</h1>
-			<p>{{ program.synopsys }}</p>
-			<p>Catégorie :
-				{{ program.category.name }}
-			</p>
-			<h2>
-				Saison numéro
-				{{ season.number }}
-			</h2>
-			<h3>Liste des épisodes</h3>
-			<ul>
-				{% for episode in episodes %}
-					<li>
-						<a href="{{ path('program_episode_show', { 'program': program.id, 'season': season.id, 'episode': episode.id }) }}">
-							{{ episode.title }}
-						</a>
-					</li>
-				{% endfor %}
-			</ul>
-		</div>
-	</div>
-	<strong>Acteurs :</strong>
-
-	<a href="{{ path('program_show', { 'id': program.id }) }}">Retour</a>
-{% endblock %}
+			<h1 class="mt-0 text-primary">{{ program.title }}</h1>
+			<p class="text-light">{{ program.synopsys }}</p>
+			<p class="text-primary">Catégorie :</p>
+			<p class="text-light">
+				{{ program.category.name }}</p>
+		</p>
+		<p class="text-primary">Saison :</p>
+		<p class=" text-light">
+			{{ season.number }}
+		</p>
+	</h2>
+	<h2 class="text-primary">Liste des épisodes</h3>
+	<ul>
+		{% for episode in episodes %}
+			<li class="text-light">
+				<a href="{{ path('program_episode_show', { 'programSlug': program.slug, 'seasonNumber': season.number, 'episodeSlug': episode.slug }) }}">
+					{{ episode.title }}
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+</div></div><strong>Acteurs :</strong><a href="{{ path('program_show', { 'slug': program.slug }) }}">Retour</a>{% endblock %}

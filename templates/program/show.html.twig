@@ -5,30 +5,37 @@
 
 {% block body %}
 	<div class="media">
-		<img class="align-self-start mr-3" src="{{program.poster}}" alt="{{ program.title }} poster">
+		<img class="align-self-start mr-3 text-light" src="{{program.poster}}" alt="{{ program.title }} poster">
 		<div class="media-body">
-			<h1 class="mt-0">{{ program.title }}</h1>
-			<p>{{ program.synopsys }}</p>
-			<p>Catégorie :
+			<h1 class="mt-0 text-primary">{{ program.title }}</h1>
+			<p class="text-light">{{ program.synopsys }}</p>
+			<p class="text-light">Catégorie :
 				{{ program.category.name }}
 			</p>
+			<p class="text-light">Durée :
+				{{ programDuration }}
+			</p>
+			<h2 class="text-primary">Liste des saisons :
+			</h2>
 			<ul>
 				{% for season in program.seasons %}
-					<li>{{ season.number }}</li>
-					<li>
-						<a href='{{ path("program_season_show", { program: program.id, season: season.id }) }}'>Voir les épisodes</a>
+					<li class="text-light">
+						<a href='{{ path("program_season_show", { slug: program.slug, seasonNumber: season.number }) }}'>Saison
+							{{ loop.index }}</a>
 					</li>
+				{% endfor %}
+			</ul>
+			<h2 class="text-primary">Liste des acteurs :</h2>
+
+			<ul>
+				{% for actor in program.actors %}
+					<li class="text-light">{{ actor.name }}</li>
+				{% else %}
+					<li>Aucun acteur pour cette série</li>
 				{% endfor %}
 			</ul>
 		</div>
 	</div>
-	<ul>
-		{% for actor in program.actors %}
-			<li>{{ actor.name }}</li>
-		{% else %}
-			<li>Aucun acteur pour cette série</li>
-		{% endfor %}
-	</ul>
 
 	<a href="{{ path('program_index') }}">
 		Retour à la liste des programmes

@@ -1,12 +1,21 @@
-<h1>{{ program.title }}</h1>
-<h2>Saison
-	{{ season.number }}</h2>
-<p>Episode
-	{{ episode.number }}
-	-
-	{{ episode.title }}</p>
+{% extends 'base.html.twig' %}
 
-<p>{{ episode.synopsis }}</p>
+{% block title %}Série #{{ program.id }}
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-primary">{{ program.title }}
+		:
+		{{ episode.title }}</h1>
+	<h2 class="text-primary">Saison
+		{{ season.number }}</h2>
+	<p class="text-light">Episode
+		{{ episode.number }}
+		-
+		{{ episode.title }}</p>
+
+	<p class="text-light">{{ episode.synopsis }}</p>
 
 
-<a href='{{ path("program_season_show", { program: program.id, season: season.id }) }}'>Retour</a>
+	<a href='{{ path("program_season_show", { slug: program.slug, seasonNumber: season.number }) }}'>Retour</a>
+{% endblock %}

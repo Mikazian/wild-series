@@ -33,7 +33,7 @@
 									<p class="card-text h-custom text-light">
 										<span class="text-primary">Série</span>
 										{{ program.country ~ ' ' ~ program.year }}</p>
-									<a href="{{ path("program_show", { id: program.id }) }}" class="btn text-primary border border-primary">Voir plus</a>
+									<a href="{{ path("program_show", { slug: program.slug }) }}" class="btn text-primary border border-primary">Voir plus</a>
 								</div>
 							</div>
 						</div>

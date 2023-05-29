@@ -6,13 +6,16 @@ use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Program;
 use App\Form\ProgramType;
+use App\Service\ProgramDuration;
 use App\Repository\EpisodeRepository;
 use App\Repository\ProgramRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -37,13 +40,16 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ProgramRepository $programRepository): Response
+    public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugger->slug($program->getTitle());
+            $program->setSlug($slug);
+
             $programRepository->save($program, true);
             $this->addFlash('success', 'The new program has been created');
 
@@ -56,43 +62,60 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/{id<\d+>}', methods: ['GET'], name: 'show')]
-    public function show(Program $program): Response
+    #[Route('/{slug}', methods: ['GET'], name: 'show')]
+    public function show(Program $program, SluggerInterface $slugger, ProgramDuration $programDuration): Response
     {
+        $slugProgram = $slugger->slug($program->getTitle());
+        $program->setSlug($slugProgram);
+
         return $this->render('program/show.html.twig', [
             'program' => $program,
+            'programDuration' => $programDuration->calculate($program),
         ]);
     }
 
-    #[Route('/{program<\d+>}/seasons/{season<\d+>}', methods: ['GET'], name: 'season_show')]
-    public function showSeason(Program $program, Season $season, EpisodeRepository $episodeRepository): Response
+    #[Route('/{slug}/season/{seasonNumber}', methods: ['GET'], name: 'season_show')]
+    public function showSeason(Program $program, Season $season, EpisodeRepository $episodeRepository, SluggerInterface $slugger): Response
     {
-        $episodes = $episodeRepository->findBy(['season' => $season]);
+        $episodes = $season->getEpisodes();
+
+        $slugProgram = $slugger->slug($program->getTitle());
 
         return $this->render('program/season_show.html.twig', [
             'program' => $program,
             'season' => $season,
             'episodes' => $episodes,
+            'slugProgram' => $slugProgram,
         ]);
     }
 
-    #[Route('/{program<\d+>}/season/{season<\d+>}/episode/{episode<\d+>}', methods: ['GET'], name: 'episode_show')]
-    public function showEpisode(Program $program, Season $season, Episode $episode): Response
+    #[Route('/{program}/season/{seasonNumber}/episode/{episode}', methods: ['GET'], name: 'episode_show')]
+    #[ParamConverter('program', options: ['mapping' => ['program' => 'slug']])]
+    #[ParamConverter('episode', options: ['mapping' => ['episode' => 'slug']])]
+    public function showEpisode(Program $program, Season $season, Episode $episode, SluggerInterface $slugger): Response
     {
+        $slugProgram = $slugger->slug($program->getTitle());
+        $slugEpisode = $slugger->slug($episode->getTitle());
+
         return $this->render('program/episode_show.html.twig', [
             'program' => $program,
             'season' => $season,
             'episode' => $episode,
+            'slugProgram' => $slugProgram,
+            'slugEpisode' => $slugEpisode,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Program $program, ProgramRepository $programRepository): Response
+    #[Route('/{slug}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Program $program, ProgramRepository $programRepository, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugger->slug($program->getTitle());
+            $program->setSlug($slug);
+
             $programRepository->save($program, true);
             $this->addFlash('success', 'The season has been edited.');
 

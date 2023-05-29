@@ -8,10 +8,18 @@ use App\Entity\Program;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
     const PROGRAMS = 50;
+
+    private SluggerInterface $slugProgram;
+
+    public function __construct(SluggerInterface $slugProgram)
+    {
+        $this->slugProgram = $slugProgram;
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -24,6 +32,9 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setCountry($faker->country('fr_FR'));
             $program->setYear($faker->year('+10 years'));
             $program->setCategory($this->getReference('category_' . $faker->numberBetween(0, 4)));
+
+            $slug = $this->slugProgram->slug($program->getTitle());
+            $program->setSlug($slug);
 
             $manager->persist($program);
             $this->addReference('program_' . $i, $program);
