@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\Season;
 use App\Entity\Program;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -26,6 +27,14 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->persist($program);
             $this->addReference('program_' . $i, $program);
+
+            for ($j = 1; $j <= 5; $j++) {
+                $season = new Season();
+                $season->setNumber($j);
+                $season->setProgram($program);
+
+                $manager->persist($season);
+            }
         }
         $manager->flush();
     }

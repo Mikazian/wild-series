@@ -1,31 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Wild Series | Index
+{% block title %}Season index
 {% endblock %}
 
 {% block body %}
-	{{ parent()}}
-	<h1>{{ website }}
-		index</h1>
+	<h1 class="text-primary">Program index</h1>
 
-	<h1>Toutes les séries de la table program :</h1>
-	{% for program in programs %}
-		<div>
-			<h2>{{ loop.index }}
-				/
-				{{ program.title }}
-				- Catégorie :
-				{{ program.category.name  }}</h2>
-			<p>{{ program.synopsys }}</p>
-		</div>
-		<a href="{{ path("program_show", { id: program.id }) }}">Voir la fiche</a>
-	{% else %}
-		Aucune séries trouvée.
-	{% endfor %}
+	{{ parent ()}}
 
-	<br>
-	<a href="{{ path('app_index') }}">
-		Retour à l'accueil
-	</a><br>
-	<img src="{{ asset('build/path_to_image.png') }}" alt=""/>
+	<a href="{{ path('program_new') }}">Create new</a>
+
+
+	<table class="table text-light">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Title</th>
+				<th>Year</th>
+				<th>Description</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for program in programs %}
+				<tr>
+					<td>{{ program.id }}</td>
+					<td>{{ program.title }}</td>
+					<td>{{ program.year }}</td>
+					<td>{{ program.synopsys }}</td>
+					<td>
+						<a href="{{ path('program_show', {'id': program.id}) }}">show</a>
+						<a href="{{ path('program_edit', {'id': program.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}

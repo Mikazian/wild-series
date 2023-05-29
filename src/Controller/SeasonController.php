@@ -24,7 +24,7 @@ class SeasonController extends AbstractController
 
         $total = $session->get('total');
 
-        return $this->renderForm('season/index.html.twig', [
+        return $this->render('season/index.html.twig', [
             'seasons' => $seasonRepository->findAll(),
         ]);
     }
