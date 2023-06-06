@@ -19,6 +19,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
 {
@@ -85,7 +86,7 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/{slug}/season/{seasonNumber}', methods: ['GET'], name: 'season_show')]
-    public function showSeason(Program $program, Season $season, EpisodeRepository $episodeRepository, SluggerInterface $slugger): Response
+    public function showSeason(Program $program, Season $season, SluggerInterface $slugger): Response
     {
         $episodes = $season->getEpisodes();
 
@@ -132,7 +133,7 @@ class ProgramController extends AbstractController
             return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('program/edit.html.twig', [
+        return $this->render('program/edit.html.twig', [
             'program' => $program,
             'form' => $form,
         ]);

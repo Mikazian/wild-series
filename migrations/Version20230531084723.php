@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230529150325 extends AbstractMigration
+final class Version20230531084723 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20230529150325 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE episode ADD duration INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE actor ADD update_at DATETIME DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE episode DROP duration');
+        $this->addSql('ALTER TABLE actor DROP update_at');
     }
 }

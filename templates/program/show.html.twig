@@ -5,7 +5,7 @@
 
 {% block body %}
 	<div class="media">
-		<img class="align-self-start mr-3 text-light" src="{{program.poster}}" alt="{{ program.title }} poster">
+		<img src="{{ vich_uploader_asset(program) }}" alt="{{ program.title }}">
 		<div class="media-body">
 			<h1 class="mt-0 text-primary">{{ program.title }}</h1>
 			<p class="text-light">{{ program.synopsys }}</p>
