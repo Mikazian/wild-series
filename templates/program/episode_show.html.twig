@@ -16,6 +16,17 @@
 
 	<p class="text-light">{{ episode.synopsis }}</p>
 
+	{% if app.user %}
+		<h2 class="text-primary">Ajouter un commentaire</h2>
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<button type="submit">Ajouter un commentaire</button>
+		{{ form_end(form) }}
+	{% else %}
+		<p>
+			Tu dois être connecter pour ajouter un commentaire</p>
+	{% endif %}
+
 
 	<a href='{{ path("program_season_show", { slug: program.slug, seasonNumber: season.number }) }}'>Retour</a>
 {% endblock %}

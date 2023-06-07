@@ -9,6 +9,7 @@ use App\Entity\Program;
 use App\Form\CommentType;
 use App\Form\EpisodeType;
 use Symfony\Component\Mime\Email;
+use App\Repository\CommentRepository;
 use App\Repository\EpisodeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/episode')]
 class EpisodeController extends AbstractController
@@ -67,13 +69,20 @@ class EpisodeController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'app_episode_show', methods: ['GET'])]
-    public function show(Episode $episode, SluggerInterface $slugEpisode): Response
+    public function show(Episode $episode, SluggerInterface $slugEpisode, Request $request, CommentRepository $commentRepository): Response
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
 
-        $slug = $slugEpisode->slug($episode->getTitle());
-        $episode->setSlug($slug);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugEpisode->slug($episode->getTitle());
+            $episode->setSlug($slug);
+
+            $commentRepository->save($comment, true);
+
+            return $this->redirectToRoute('app_episode_show', ['slug' => $episode->getSlug()], Response::HTTP_SEE_OTHER);
+        }
 
         return $this->render('episode/show.html.twig', [
             'episode' => $episode,

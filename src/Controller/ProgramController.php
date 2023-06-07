@@ -2,13 +2,17 @@
 // src/Controller/ProgramController.php
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Season;
+use App\Entity\Comment;
 use App\Entity\Episode;
 use App\Entity\Program;
+use App\Form\CommentType;
 use App\Form\ProgramType;
 use App\Service\ProgramDuration;
 use Symfony\Component\Mime\Email;
-use App\Repository\EpisodeRepository;
+use App\Repository\UserRepository;
+use App\Repository\CommentRepository;
 use App\Repository\ProgramRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -100,13 +104,27 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/{program}/season/{seasonNumber}/episode/{episode}', methods: ['GET'], name: 'episode_show')]
+    #[Route('/{program}/season/{seasonNumber}/episode/{episode}', methods: ['GET', 'POST'], name: 'episode_show')]
     #[ParamConverter('program', options: ['mapping' => ['program' => 'slug']])]
     #[ParamConverter('episode', options: ['mapping' => ['episode' => 'slug']])]
-    public function showEpisode(Program $program, Season $season, Episode $episode, SluggerInterface $slugger): Response
+    public function showEpisode(Program $program, Season $season, Episode $episode, SluggerInterface $slugger, Request $request): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
         $slugProgram = $slugger->slug($program->getTitle());
         $slugEpisode = $slugger->slug($episode->getTitle());
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $user->addComment($comment);
+
+            return $this->redirectToRoute('program_episode_show', [
+                'program' => $program->getSlug(),
+                'seasonNumber' => $season->getNumber(),
+                'episode' => $episode->getSlug(),
+            ], Response::HTTP_SEE_OTHER);
+        }
 
         return $this->render('program/episode_show.html.twig', [
             'program' => $program,
@@ -114,6 +132,7 @@ class ProgramController extends AbstractController
             'episode' => $episode,
             'slugProgram' => $slugProgram,
             'slugEpisode' => $slugEpisode,
+            'form' => $form,
         ]);
     }
 
