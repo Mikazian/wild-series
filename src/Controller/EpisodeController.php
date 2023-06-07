@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Season;
+use App\Entity\Comment;
 use App\Entity\Episode;
 use App\Entity\Program;
+use App\Form\CommentType;
 use App\Form\EpisodeType;
 use Symfony\Component\Mime\Email;
 use App\Repository\EpisodeRepository;
@@ -67,11 +69,15 @@ class EpisodeController extends AbstractController
     #[Route('/{slug}', name: 'app_episode_show', methods: ['GET'])]
     public function show(Episode $episode, SluggerInterface $slugEpisode): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
         $slug = $slugEpisode->slug($episode->getTitle());
         $episode->setSlug($slug);
 
         return $this->render('episode/show.html.twig', [
             'episode' => $episode,
+            'form' => $form,
         ]);
     }
 

@@ -15,10 +15,10 @@ class Comment
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    private ?user $author = null;
+    private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    private ?episode $episode = null;
+    private ?Episode $episode = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;

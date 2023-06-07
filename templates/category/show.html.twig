@@ -9,7 +9,7 @@
 				<p>{{ program.synopsys }}</p>
 			</div>
 		</div>
-		<a href="{{ path("program_show", { id: program.id }) }}">Voir la fiche</a>
+		<a href="{{ path("program_show", { slug: program.slug }) }}">Voir la fiche</a>
 	{% endfor %}
 
 	<a href="{{ path('program_index') }}">
