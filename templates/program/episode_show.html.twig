@@ -17,11 +17,7 @@
 	<p class="text-light">{{ episode.synopsis }}</p>
 
 	{% if app.user %}
-		<h2 class="text-primary">Ajouter un commentaire</h2>
-		{{ form_start(form) }}
-		{{ form_widget(form) }}
-		<button type="submit">Ajouter un commentaire</button>
-		{{ form_end(form) }}
+		<a href='{{ path("app_comment_new", { 'episode' : episode.id, 'user' : app.user.id }) }}'>Ajouter un commentaire</a>
 	{% else %}
 		<p>
 			Tu dois être connecter pour ajouter un commentaire</p>

@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentRepository;
+use App\Entity\User;
+use App\Entity\Episode;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommentRepository;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -31,7 +33,7 @@ class Comment
         return $this->id;
     }
 
-    public function getAuthor(): ?user
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
@@ -43,12 +45,12 @@ class Comment
         return $this;
     }
 
-    public function getEpisode(): ?episode
+    public function getEpisode(): ?Episode
     {
         return $this->episode;
     }
 
-    public function setEpisode(?episode $episode): self
+    public function setEpisode(?Episode $episode): self
     {
         $this->episode = $episode;
 
