@@ -37,6 +37,7 @@ class Comment
         max: 3,
         maxMessage: 'La note doit faire moin de 3 caractères !'
     )]
+
     private ?int $rate = null;
 
     public function getId(): ?int
@@ -49,7 +50,7 @@ class Comment
         return $this->author;
     }
 
-    public function setAuthor(?user $author): self
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
 

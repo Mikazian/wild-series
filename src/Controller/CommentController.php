@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/comment', name: 'app_comment_')]
 class CommentController extends AbstractController
@@ -34,6 +35,7 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setAuthor($this->getUser());
             $commentRepository->save($comment, true);
             $this->addFlash('success', 'Votre commentaire a été posté !');
 
@@ -50,10 +52,44 @@ class CommentController extends AbstractController
         ]);
     }
 
+    #[Route('{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Comment $comment, CommentRepository $programRepository): Response
+    {
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($this->getUser() !== $comment->getAuthor() && !$this->isGranted('ROLE_ADMIN')) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw $this->createAccessDeniedException('Tu ne peux pas modifier le commentaire d\'un autre utilisateur !');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $programRepository->save($comment, true);
+            $this->addFlash('success', 'The comment has been edited.');
+
+            return $this->redirectToRoute('program_episode_show', [
+                'program' => $comment->getEpisode()->getSeason()->getProgram()->getSlug(),
+                'seasonNumber' => $comment->getEpisode()->getSeason()->getNumber(),
+                'episode' => $comment->getEpisode()->getSlug(),
+            ], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('comment/edit.html.twig', [
+            'comment' => $comment,
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     #[IsGranted('ROLE_CONTRIBUTOR')]
     public function delete(Request $request, Comment $comment, CommentRepository $commentRepository): Response
     {
+        if ($this->getUser() !== $comment->getAuthor() && !$this->isGranted('ROLE_ADMIN')) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw $this->createAccessDeniedException('Tu ne peux pas supprimer le commentaire d\'un autre utilisateur !');
+        }
+
         if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
             $commentRepository->remove($comment, true);
             $this->addFlash('danger', 'Ton commentaire a été supprimé !');
