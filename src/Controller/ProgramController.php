@@ -2,16 +2,12 @@
 // src/Controller/ProgramController.php
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Season;
-use App\Entity\Comment;
 use App\Entity\Episode;
 use App\Entity\Program;
-use App\Form\CommentType;
 use App\Form\ProgramType;
 use App\Service\ProgramDuration;
 use Symfony\Component\Mime\Email;
-use App\Repository\UserRepository;
 use App\Repository\CommentRepository;
 use App\Repository\ProgramRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 #[Route('/program', name: 'program_')]
@@ -56,7 +53,7 @@ class ProgramController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $slug = $slugger->slug($program->getTitle());
             $program->setSlug($slug);
-
+            $program->setOwner($this->getUser());
             $programRepository->save($program, true);
             $this->addFlash('success', 'The new program has been created');
 
@@ -129,6 +126,11 @@ class ProgramController extends AbstractController
     {
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
+
+        if ($this->getUser() !== $program->getOwner()) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw $this->createAccessDeniedException('Tu ne peux pas modifier le program d\'un autre utilisateur !');
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $slug = $slugger->slug($program->getTitle());

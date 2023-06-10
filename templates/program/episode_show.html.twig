@@ -31,9 +31,12 @@
 	{% endif %}
 
 	{% for comment in comments %}
-		<ul>
+		<ul class="text-light">
 			<li>{{ comment.author.email ~ " " ~ "note :" ~ " " ~ comment.rate ~ " " ~ comment.comment }}</li>
 		</ul>
+		{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_CONTRIBUTOR") %}
+			{{ include('comment/_delete_form.html.twig') }}
+		{% endif %}
 	{% endfor %}
 
 	<a href='{{ path("program_season_show", { slug: program.slug, seasonNumber: season.number }) }}'>Retour</a>

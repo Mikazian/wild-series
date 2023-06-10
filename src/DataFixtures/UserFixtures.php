@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
@@ -29,6 +30,7 @@ class UserFixtures extends Fixture
 
         $contributor->setPassword($hashedPassword);
         $manager->persist($contributor);
+        $this->addReference('user_1', $contributor);
 
         // Admin
         $admin = new User();
@@ -41,6 +43,7 @@ class UserFixtures extends Fixture
 
         $admin->setPassword($hashedPassword);
         $manager->persist($admin);
+        $this->addReference('user_2', $admin);
 
         // Sauvegarde des 2 nouveaux utilisateurs
         $manager->flush();

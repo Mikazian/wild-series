@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\User;
+use App\Entity\Actor;
+use App\Entity\Season;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProgramRepository;
@@ -57,6 +60,9 @@ class Program
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'programs')]
+    private ?user $owner = null;
 
     public function __construct()
     {
@@ -233,6 +239,18 @@ class Program
     public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
