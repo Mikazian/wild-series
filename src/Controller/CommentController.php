@@ -32,7 +32,13 @@ class CommentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $commentRepository->save($comment, true);
-            return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Votre commentaire a été posté !');
+
+            return $this->redirectToRoute('program_episode_show', [
+                'program' => $episode->getSeason()->getProgram()->getSlug(),
+                'seasonNumber' => $episode->getSeason()->getNumber(),
+                'episode' => $episode->getSlug(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('comment/new.html.twig', [

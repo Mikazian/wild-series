@@ -107,25 +107,12 @@ class ProgramController extends AbstractController
     #[Route('/{program}/season/{seasonNumber}/episode/{episode}', methods: ['GET', 'POST'], name: 'episode_show')]
     #[ParamConverter('program', options: ['mapping' => ['program' => 'slug']])]
     #[ParamConverter('episode', options: ['mapping' => ['episode' => 'slug']])]
-    public function showEpisode(Program $program, Season $season, Episode $episode, SluggerInterface $slugger, Request $request): Response
+    public function showEpisode(Program $program, Season $season, Episode $episode, SluggerInterface $slugger, Request $request, CommentRepository $commentRepository): Response
     {
-        $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
         $slugProgram = $slugger->slug($program->getTitle());
         $slugEpisode = $slugger->slug($episode->getTitle());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // TODO ...
-
-            return $this->redirectToRoute('program_episode_show', [
-                'program' => $program->getSlug(),
-                'seasonNumber' => $season->getNumber(),
-                'episode' => $episode->getSlug(),
-            ], Response::HTTP_SEE_OTHER);
-        }
+        $comments = $commentRepository->findby(['episode' => $episode], ['id' => 'DESC']);
 
         return $this->render('program/episode_show.html.twig', [
             'program' => $program,
@@ -133,7 +120,7 @@ class ProgramController extends AbstractController
             'episode' => $episode,
             'slugProgram' => $slugProgram,
             'slugEpisode' => $slugEpisode,
-            'form' => $form,
+            'comments' => $comments,
         ]);
     }
 
