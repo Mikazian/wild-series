@@ -81,9 +81,14 @@
 							Se connecter</a>
 						<a href="{{ path('app_register') }}" class="btn btn-outline-primary">Créer un compte</a>
 					{% endif %}
-
 				</div>
 			</ul>
+		</div>
+		<div>
+			<!-- some content -->
+			<button {{ stimulus_action('theme', 'toggleDarkMode')}}>
+				clic me
+			</button>
 		</div>
 	</div>
 </nav>

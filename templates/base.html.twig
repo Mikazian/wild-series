@@ -17,13 +17,14 @@
 			{{ encore_entry_script_tags('app') }}
 		{% endblock %}
 	</head>
-	<body>
+	<body {{ stimulus_controller('theme') }} {{ stimulus_target('theme', 'body') }}>
 		{% block nav %}
 			<header>
 				{% include './componant/_navbar.html.twig'%}
 			</header>
 		{% endblock %}
 		{% block body %}
+
 			{# {{ app.session.get('total') }} #}
 			{% for category, messages in app.flashes %}
 				{% for message in messages %}
@@ -37,4 +38,4 @@
 			{% include './componant/_footer.html.twig'%}
 		{% endblock %}
 	</body>
-</html>
+</html></body></html>

@@ -1,38 +1,31 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
-import "./styles/app.scss";
-
-// start the Stimulus application
-import "./bootstrap";
-
-console.log("Hello Webpack Encore !");
-
-// app.js
-
+// Import des dépendances
 const $ = require("jquery");
-// this "modifies" the jquery module: adding behavior to it
-// the bootstrap module doesn't export/return anything
-require("bootstrap");
+const bootstrap = require("bootstrap");
+require("./styles/app.scss");
+require("./bootstrap");
 
-// or you can include specific pieces
-// require('bootstrap/js/dist/tooltip');
-// require('bootstrap/js/dist/popover');
-
+// Activation des popovers
 $(document).ready(function () {
   $('[data-toggle="popover"]').popover();
 });
 
+// Activation des tooltips avec Turbo Drive
+// document.addEventListener("turbo:load", function (e) {
+//   let tooltipTriggerList = [].slice.call(
+//     document.querySelectorAll('[data-bs-toggle="tooltip"]')
+//   );
+//   let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+//     return new bootstrap.Tooltip(tooltipTriggerEl);
+//   });
+// });
+
+// Carousel responsive
 var multipleCardCarousel = document.querySelector("#carouselExampleControls");
 if (window.matchMedia("(min-width: 768px)").matches) {
   var carouselWidth = $(".carousel-inner")[0].scrollWidth;
   var cardWidth = $(".carousel-item").width();
   var scrollPosition = 0;
+
   $("#carouselExampleControls .carousel-control-next").on("click", function () {
     if (scrollPosition < carouselWidth - cardWidth * 4) {
       scrollPosition += cardWidth;
@@ -42,6 +35,7 @@ if (window.matchMedia("(min-width: 768px)").matches) {
       );
     }
   });
+
   $("#carouselExampleControls .carousel-control-prev").on("click", function () {
     if (scrollPosition > 0) {
       scrollPosition -= cardWidth;
@@ -54,3 +48,5 @@ if (window.matchMedia("(min-width: 768px)").matches) {
 } else {
   $(multipleCardCarousel).addClass("slide");
 }
+
+console.log("Hello Webpack Encore!");
